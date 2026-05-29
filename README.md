@@ -21,7 +21,7 @@ A Zotero 7–9 plugin that exports a selected region of a PDF as a high-resoluti
 ## Requirements
 
 - Zotero 7, 8, or 9 (tested on 9)
-- Works on macOS, Windows, and Linux
+- Works on macOS, Windows, and Linux (tested on macOS)
 
 ## License
 
