@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "PDF Region Export",
+  "version": "0.1.0",
+  "description": "Export a selected region of a PDF as a high-resolution image.",
+  "author": "Andrea Damonte",
+  "applications": {
+    "zotero": {
+      "id": "pdf-region-export@andreadamonte",
+      "update_url": "https://example.com/updates.json",
+      "strict_min_version": "6.999",
+      "strict_max_version": "9.*"
+    }
+  }
+}
