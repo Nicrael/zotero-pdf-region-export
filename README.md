@@ -11,12 +11,12 @@ A Zotero 7–9 plugin that exports a selected region of a PDF as a high-resoluti
 - Right-click drag to pan
 - Live size readout in pixels
 - Exports at chosen DPI (default 300) to PNG or JPG
-
+  
 ## Installation
 
-1. Download the latest `.xpi` from the [Releases page](../../releases).
+1. Download the latest `.xpi` from the [Releases page](https://github.com/Nicrael/zotero-pdf-region-export/releases/latest).
 2. In Zotero: Tools → Plugins → gear icon → **Install Plugin From File**.
-3. Select the `.xpi`. Open any PDF and right-click in the page.
+3. Select the downloaded `.xpi`. Open any PDF and right-click in the page or use the toolbar button.
 
 ## Requirements
 
