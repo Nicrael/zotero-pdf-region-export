@@ -37,6 +37,21 @@ var RegionExport = {
     const zoomLabel = el("span", { textContent: "100%" }, "font-size:12px;min-width:42px;text-align:center;");
     const exportBtn = el("button", { textContent: "Export selection", disabled: true });
 
+    const ratioOpts = [
+      { label: "Free", v: null },
+      { label: "1:1",  v: 1 },
+      { label: "4:3",  v: 4/3 },
+      { label: "16:9", v: 16/9 },
+    ];
+    const ratioBtns = ratioOpts.map(opt => {
+      const btn = el("button", { textContent: opt.label }, opt.v === null ? "border-color:#06c;" : "");
+      btn.addEventListener("click", () => {
+        aspectRatio = opt.v;
+        ratioBtns.forEach((b, i) => { b.style.borderColor = ratioOpts[i].v === aspectRatio ? "#06c" : ""; });
+      });
+      return btn;
+    });
+
     bar.appendChild(el("label", { textContent: "Page:" }));
     bar.appendChild(pageInput);
     bar.appendChild(el("label", { textContent: "Format:" }));
@@ -46,6 +61,8 @@ var RegionExport = {
     bar.appendChild(renderBtn);
     bar.appendChild(el("span", { textContent: "⚠ Reload the page if you changed the DPI." },
       "color:#b35900;font-size:12px;margin-left:6px;"));
+    bar.appendChild(el("label", { textContent: "Ratio:" }, "margin-left:10px;"));
+    ratioBtns.forEach(btn => bar.appendChild(btn));
     bar.appendChild(el("span", {}, "flex:1;"));
     bar.appendChild(zoomOutBtn);
     bar.appendChild(zoomLabel);
@@ -98,6 +115,7 @@ var RegionExport = {
     let pdfjs = null, pdfDoc = null, viewport = null;
     let meta = null;
     let sel = null;
+    let aspectRatio = null;
     let sx = 0, sy = 0;
     let mode = null;
     let resizeName = null;
@@ -297,8 +315,13 @@ var RegionExport = {
       const ratio = parseFloat(canvas.dataset.ratio) || 1;
       if (mode === "draw") {
         const p = clientToCanvas(e);
-        const cx = p.x / ratio, cy = p.y / ratio;
-        sel = normalizeSel({ x: sx, y: sy, w: cx - sx, h: cy - sy });
+        let dx = p.x / ratio - sx, dy = p.y / ratio - sy;
+        if (aspectRatio !== null) {
+          const aw = Math.abs(dx), ah = Math.abs(dy);
+          if (aw / (ah || 1) > aspectRatio) { dy = (dy >= 0 ? 1 : -1) * aw / aspectRatio; }
+          else { dx = (dx >= 0 ? 1 : -1) * ah * aspectRatio; }
+        }
+        sel = normalizeSel({ x: sx, y: sy, w: dx, h: dy });
         positionRect();
       } else if (mode === "move") {
         const dx = (e.clientX - startMouse.x) / ratio;
@@ -313,7 +336,19 @@ var RegionExport = {
         if (resizeName.indexOf("s") !== -1) { h += dy; }
         if (resizeName.indexOf("w") !== -1) { x += dx; w -= dx; }
         if (resizeName.indexOf("e") !== -1) { w += dx; }
-        sel = normalizeSel({ x: x, y: y, w: w, h: h });
+        if (aspectRatio !== null && resizeName.length === 2) {
+          const aw = Math.abs(w), ah = Math.abs(h);
+          if (aw / (ah || 1) > aspectRatio) {
+            const newH = aw / aspectRatio;
+            if (resizeName.indexOf("n") !== -1) y = startSel.y + startSel.h - newH;
+            h = newH;
+          } else {
+            const newW = ah * aspectRatio;
+            if (resizeName.indexOf("w") !== -1) x = startSel.x + startSel.w - newW;
+            w = newW;
+          }
+        }
+        sel = normalizeSel({ x, y, w, h });
         positionRect();
       }
     });
