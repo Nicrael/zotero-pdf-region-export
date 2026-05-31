@@ -96,6 +96,7 @@ var RegionExport = {
     dpiInput.value = Zotero.Prefs.get("extensions.regionExport.dpi", true) || 300;
 
     let pdfjs = null, pdfDoc = null, viewport = null;
+    let meta = null;
     let sel = null;
     let sx = 0, sy = 0;
     let mode = null;
@@ -116,6 +117,18 @@ var RegionExport = {
       if (pdfDoc) return pdfDoc;
       const item = await Zotero.Items.getAsync(args.itemID);
       const path = await item.getFilePathAsync();
+      try {
+        const parent = item.parentItemID ? await Zotero.Items.getAsync(item.parentItemID) : item;
+        const creators = parent.getCreators ? parent.getCreators() : [];
+        const first = creators.find(c => c.creatorType === "author") || creators[0];
+        const lastName = first ? (first.lastName || first.name || "") : "";
+        const dateStr = parent.getField ? (parent.getField("date") || "") : "";
+        const yearMatch = dateStr.match(/\d{4}/);
+        const year = yearMatch ? yearMatch[0] : "";
+        const title = parent.getField ? (parent.getField("title") || "") : "";
+        meta = { lastName, year, title };
+        document.title = [lastName, year, title].filter(Boolean).join(" – ");
+      } catch (e) {}
       const data = await IOUtils.read(path);
       const lib = await getPdfjs();
       pdfDoc = await lib.getDocument({ data, useWorkerFetch: false }).promise;
@@ -337,7 +350,16 @@ var RegionExport = {
       fp.init(window, "Save image", fp.modeSave);
       fp.appendFilter(fmt.toUpperCase(), "*." + fmt);
       fp.defaultExtension = fmt;
-      fp.defaultString = "region." + fmt;
+      const pageNum = parseInt(pageInput.value, 10) || 1;
+      const pageStr = "page" + String(pageNum).padStart(2, "0");
+      const sanitize = s => s.replace(/[/\\:*?"<>|]/g, "").replace(/\s+/g, "_").slice(0, 60);
+      const nameParts = [
+        meta && meta.lastName ? sanitize(meta.lastName) : "",
+        meta && meta.year ? meta.year : "",
+        pageStr,
+        "fig"
+      ].filter(Boolean);
+      fp.defaultString = nameParts.join("-") + "." + fmt;
       const lastDir = Zotero.Prefs.get("extensions.regionExport.saveDir", true);
       if (lastDir) fp.displayDirectory = lastDir;
       const rv = await fp.show();

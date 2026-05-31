@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PDF Region Export",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Export a selected region of a PDF as a high-resolution image.",
   "author": "Andrea Damonte",
   "applications": {
