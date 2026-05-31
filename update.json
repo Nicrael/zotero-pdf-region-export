@@ -5,6 +5,10 @@
         {
           "version": "0.2.0",
           "update_link": "https://github.com/Nicrael/zotero-pdf-region-export/releases/download/v0.2.0/pdf-region-export-0.2.0.xpi"
+        },
+        {
+          "version": "0.3.0",
+          "update_link": "https://github.com/Nicrael/zotero-pdf-region-export/releases/download/v0.3.0/pdf-region-export-0.3.0.xpi"
         }
       ]
     }
