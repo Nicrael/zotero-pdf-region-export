@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "PDF Region Export",
-  "version": "0.3.0",
-  "description": "Export a selected region of a PDF as a high-resolution image.",
+  "version": "0.4.0",
+  "description": "Export a selected region of a PDF as a high-resolution image, and copy text selections as LaTeX citations.",
   "author": "Andrea Damonte",
   "applications": {
     "zotero": {
