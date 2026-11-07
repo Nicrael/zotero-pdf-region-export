@@ -17,6 +17,16 @@
         {
           "version": "0.4.0",
           "update_link": "https://github.com/Nicrael/zotero-pdf-region-export/releases/download/v0.4.0/pdf-region-export-0.4.0.xpi"
+        },
+        {
+          "version": "0.4.1",
+          "update_link": "https://github.com/Nicrael/zotero-pdf-region-export/releases/download/v0.4.1/pdf-region-export-0.4.1.xpi",
+          "applications": {
+            "zotero": {
+              "strict_min_version": "6.999",
+              "strict_max_version": "10.*"
+            }
+          }
         }
       ]
     }
