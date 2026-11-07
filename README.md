@@ -1,6 +1,6 @@
 # PDF Region Export
 
-A Zotero 7–9 plugin that
+A Zotero 7-10 plugin that
 
 - exports a selected region of a PDF as a high-resolution PNG or JPG image, and
 - copies a highlighted text selection as a ready-to-paste **LaTeX citation**.
@@ -135,7 +135,7 @@ To match a different command or argument order, just change the template — for
 
 ## Requirements
 
-- Zotero 7, 8, or 9 (tested on 9)
+- Zotero 7, 8, 9 or 10 (tested on 9 and 10)
 - macOS, Windows, or Linux (tested on macOS)
 
 ## License
